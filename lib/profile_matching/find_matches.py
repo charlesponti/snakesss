@@ -1,10 +1,19 @@
+from dataclasses import dataclass
+from numpy import matrix
 import tqdm
 import json
 from sklearn.metrics.pairwise import cosine_similarity
 
 
+@dataclass
+class Profile:
+    id: str
+    description: str
+    embedding: matrix
+
+
 def get_profile_matches():
-    users = json.load(open("embeddings.json"))
+    users: dict[str, Profile] = json.load(open("embeddings.json"))
 
     ids = list(users.keys())
 
@@ -21,16 +30,14 @@ def get_profile_matches():
             user_1 = users[id]
             user_2 = users[to_compare[j]]
 
-            similarity = cosine_similarity(
-                [user_1["embedding"]], [user_2["embedding"]]
-            )[0][0]
+            similarity = cosine_similarity(user_1.embedding, user_2.embedding)[0][0]
 
             matches.append(
                 {
                     "user_1": id,
                     "user_2": to_compare[j],
-                    "profile_1": user_1["description"],
-                    "profile_2": user_2["description"],
+                    "profile_1": user_1.description,
+                    "profile_2": user_2.description,
                     "score": similarity,
                 }
             )

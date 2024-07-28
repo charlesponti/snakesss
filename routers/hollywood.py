@@ -1,13 +1,7 @@
-import os
-from fastapi import FastAPI, UploadFile, File
-from email import message_from_bytes
-from email.policy import default
-import boto3
 import json
 from typing import Annotated
 from lib.clients.openai import client
 from lib.repositories.file_repository import FileRepository
-from lib.schemas.candidates import candidate_schema
 from fastapi import APIRouter, Form
 
 router = APIRouter(

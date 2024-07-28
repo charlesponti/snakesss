@@ -1,0 +1,35 @@
+[tool.poetry]
+name = "snakesss"
+version = "0.1.0"
+description = "Your project description"
+authors = ["Your Name <your.email@example.com>"]
+
+[tool.poetry.dependencies]
+python = "^3.9"  # Adjust this to your minimum Python version
+pylint = "*"
+isort = "*"
+black = "*"
+typing = "*"
+pytest = "*"
+spacy = "*"
+openai = "*"
+pandas = "*"
+scikit-learn = "*"
+tqdm = "*"
+flask = "*"
+typer = "*"
+requests = "*"
+fastapi = "*"
+python-dotenv = "*"
+python-multipart = "*"
+dateparser = "*"
+boto3 = "*"
+
+[tool.poetry.dev-dependencies]
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+ponti-writer = "cli.writer:app"

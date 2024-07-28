@@ -19,7 +19,7 @@ s3 = boto3.client(
 )
 
 
-def get_email_body(msg: Message[str, str]):
+def get_email_body(msg: Message):
     if msg.is_multipart():
         for part in msg.walk():
             ctype = part.get_content_type()
