@@ -1,0 +1,55 @@
+# Use the official Python image from the Docker Hub
+FROM python:3.11-alpine
+
+# Avoid prompts from apt
+ENV DEBIAN_FRONTEND=noninteractive
+
+# Install necessary dependencies
+RUN apk add --no-cache \
+  bash \
+  curl \
+  gcc \
+  musl-dev \
+  libffi-dev \
+  openssl-dev \
+  cargo
+
+# Install Rust
+RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+
+# Add Rust to PATH
+ENV PATH="/root/.cargo/bin:${PATH}"
+
+# Verify installation
+RUN rustc --version && cargo --version
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Install Poetry
+RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.1.12
+
+# Add Poetry to PATH
+ENV PATH="/root/.local/bin:${PATH}"
+
+# Copy the poetry.lock and pyproject.toml files into the container
+COPY pyproject.toml poetry.lock /app/
+
+# Install the dependencies using Poetry
+RUN poetry install --no-root --no-interaction
+
+# Copy the rest of the working directory contents into the container
+COPY . /app/
+
+# Command to run the app with hot reload
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+
+# Set the entrypoint to the Lambda runtime interface emulator for local testing
+# ENTRYPOINT [ "/usr/local/bin/aws-lambda-rie", "python3", "-m", "awslambdaric" ]
+
+# Install the AWS Lambda RIE for local testing
+# ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /usr/local/bin/aws-lambda-rie
+# RUN chmod +x /usr/local/bin/aws-lambda-rie
+
+# Set the Lambda handler
+# CMD [ "app.functions.smart_input.lambda_handler" ]

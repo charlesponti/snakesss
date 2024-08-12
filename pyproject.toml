@@ -3,9 +3,10 @@ name = "snakesss"
 version = "0.1.0"
 description = "Your project description"
 authors = ["Your Name <your.email@example.com>"]
+package-mode = false
 
 [tool.poetry.dependencies]
-python = "^3.9"  # Adjust this to your minimum Python version
+python = "^3.9"        # Adjust this to your minimum Python version
 pylint = "*"
 isort = "*"
 black = "*"
