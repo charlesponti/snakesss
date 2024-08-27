@@ -1,5 +1,5 @@
 # Use the base image provided by AWS for Lambda with Python 3.10
-FROM public.ecr.aws/lambda/python:3.10
+FROM public.ecr.aws/lambda/python:3.9
 
 # Copy our lambda function and any other required files/folders to the container
 COPY src/app.py .

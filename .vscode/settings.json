@@ -7,5 +7,16 @@
     "editor.wordBasedSuggestions": "off",
     "editor.defaultFormatter": "charliermarsh.ruff"
   },
-  "cSpell.ignoreWords": ["langchain", "openai"]
+  "cSpell.ignoreWords": ["langchain", "openai"],
+  "cSpell.words": [
+    "boto",
+    "dotenv",
+    "fastapi",
+    "iterrows",
+    "levelname",
+    "ollama",
+    "schnell",
+    "spacy",
+    "typer"
+  ]
 }

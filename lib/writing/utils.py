@@ -1,4 +1,22 @@
-personal_pronouns = ["i", "i'm", "i've", "i'll", "i'd", "me", "my", "mine"]
+personal_pronouns = [
+    "i",
+    "i'm",
+    "i've",
+    "i'll",
+    "i'd",
+    "me",
+    "my",
+    "mine",
+    "myself",
+    "you",
+    "you're",
+    "you've",
+    "you'll",
+    "you'd",
+    "your",
+    "yours",
+    "yourself",
+]
 
 
 def has_personal_pronouns(words: list[str]) -> bool:

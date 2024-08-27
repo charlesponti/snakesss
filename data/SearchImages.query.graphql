@@ -1,0 +1,13 @@
+query {
+  searchImages(query: "beach sunset", limit: 5) {
+    id
+    similarity
+    metadata {
+      filename
+      creationTime
+      width
+      height
+      mediaType
+    }
+  }
+}

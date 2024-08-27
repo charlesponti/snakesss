@@ -10,39 +10,33 @@ test:
 	pytest
 
 lint:
-	flake8 .
+	ruff check
 
 format:
-	black .
+	ruff format
 
-py-clear-cache:
-	find . -type f -name "*.pyc" -delete
-	find . -type d -name "__pycache__" -delete
 
 # Docker-related commands
 .PHONY: docker-build docker-run docker-stop docker-clean
 
 docker-build:
-	docker build -t myproject .
+	docker build -t snakesss .
 
 docker-run:
-	docker run -d --name myproject_container myproject
+	docker run -d --name snakesss_fastapi snakesss
 
 docker-stop:
-	docker stop myproject_container
+	docker stop snakesss_fastapi
 
 docker-clean:
-	docker rm myproject_container
+	docker rm snakesss_fastapi
+
 
 # Development shortcuts
-.PHONY: dev setup clean
+.PHONY: dev clean
 
 dev:
-	python manage.py runserver
-
-setup:
-	python manage.py migrate
-	python manage.py createsuperuser
+	uvicorn main:app --reload --host 0.0.0.0 --port 8000
 
 clean:
 	find . -type f -name "*.pyc" -delete

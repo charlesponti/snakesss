@@ -1,55 +1,52 @@
-# Use the official Python image from the Docker Hub
-FROM python:3.11-alpine
+FROM python:3.11-slim as base
 
-# Avoid prompts from apt
-ENV DEBIAN_FRONTEND=noninteractive
+ENV DEV=${DEV:-0}
+ENV PYDEVD_DISABLE_FILE_VALIDATION=1
+ENV PYTHONUNBUFFERED=1 \
+  PYTHONDONTWRITEBYTECODE=1 \
+  PIP_NO_CACHE_DIR=off \
+  PIP_DISABLE_PIP_VERSION_CHECK=on \
+  PIP_DEFAULT_TIMEOUT=100
 
-# Install necessary dependencies
-RUN apk add --no-cache \
-  bash \
-  curl \
-  gcc \
-  musl-dev \
-  libffi-dev \
-  openssl-dev \
-  cargo
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends \
+    g++ \
+    curl \
+    # Required for scientific and mathematical libraries, such as numpy and pandas
+    gfortran \
+    libopenblas-dev \
+    openssl \
+    && rm -rf /var/lib/apt/lists/*
 
-# Install Rust
-RUN curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s -- -y
+# Install uv
+RUN pip install uv
 
-# Add Rust to PATH
-ENV PATH="/root/.cargo/bin:${PATH}"
+# Copy the project into the image
+ADD . /app
 
-# Verify installation
-RUN rustc --version && cargo --version
-
-# Set the working directory in the container
+# Set the working directory
 WORKDIR /app
 
-# Install Poetry
-RUN curl -sSL https://install.python-poetry.org | python3 - --version 1.1.12
+# Create a virtual environment
+RUN uv venv /opt/venv
 
-# Add Poetry to PATH
-ENV PATH="/root/.local/bin:${PATH}"
+# Use the virtual environment automatically
+ENV VIRTUAL_ENV=/opt/venv
 
-# Copy the poetry.lock and pyproject.toml files into the container
-COPY pyproject.toml poetry.lock /app/
+# Place entry points in the environment at the front of the path
+ENV PATH="/opt/venv/bin:$PATH"
 
-# Install the dependencies using Poetry
-RUN poetry install --no-root --no-interaction
+# Copy pyproject.toml for dependency installation
+COPY pyproject.toml .
 
-# Copy the rest of the working directory contents into the container
-COPY . /app/
+# Install the project dependencies using uv
+RUN uv pip install -r pyproject.toml
 
-# Command to run the app with hot reload
+# Expose debugging port
+EXPOSE 5678
+
+# Expose application port
+EXPOSE 8000
+
+# Run the application with hot reloading
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
-
-# Set the entrypoint to the Lambda runtime interface emulator for local testing
-# ENTRYPOINT [ "/usr/local/bin/aws-lambda-rie", "python3", "-m", "awslambdaric" ]
-
-# Install the AWS Lambda RIE for local testing
-# ADD https://github.com/aws/aws-lambda-runtime-interface-emulator/releases/latest/download/aws-lambda-rie /usr/local/bin/aws-lambda-rie
-# RUN chmod +x /usr/local/bin/aws-lambda-rie
-
-# Set the Lambda handler
-# CMD [ "app.functions.smart_input.lambda_handler" ]

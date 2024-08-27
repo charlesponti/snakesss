@@ -4,8 +4,64 @@ services:
       context: .
       dockerfile: Dockerfile.dev
     ports:
+      - "5678:5678" # Debugging port
       - "5555:8000"
     volumes:
       - .:/app
       - /app/__pycache__/
+    environment:
+      - CHROMA_HOST=chroma
+      - CHROMA_PORT=8000
     command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    # command: ["sh", "-c", "python -m debugpy --wait-for-client --listen 0.0.0.0:5678 -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload"]
+    depends_on:
+      - postgres
+      - rabbitmq
+      - chroma
+      - redis
+
+  postgres:
+    image: postgres
+    ports:
+      - "5435:5432"
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_MAX_CONNECTIONS: 200
+    volumes:
+      - picasso_postgres_data:/var/lib/postgresql/data
+
+  rabbitmq:
+    image: rabbitmq:management-alpine
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: user
+      RABBITMQ_DEFAULT_PASS: password
+
+  chroma:
+    image: ghcr.io/chroma-core/chroma:latest
+    volumes:
+      - picasso_chroma_data:/chroma/chroma
+    ports:
+      - "8000:8000"
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+  redis:
+    container_name: altar-redis
+    image: redis:latest
+    ports:
+      - "6379:6379"
+    volumes:
+      - picasso_redis_data:/data
+    restart: always
+
+volumes:
+  picasso_chroma_data:
+  picasso_redis_data:
+  picasso_postgres_data:

@@ -1,16 +1,9 @@
 from dotenv import load_dotenv
-
 load_dotenv()
 
-from fastapi import FastAPI
-from routers import ollama, media
+from src.server import app # noqa: E402
 
-app = FastAPI()
+if __name__ == "__main__":
+    import uvicorn
 
-app.include_router(ollama.router)
-app.include_router(media.vision_router)
-
-
-@app.get("/")
-async def index():
-    return {"message": "Hello Smurf"}
+    uvicorn.run(app, host="0.0.0.0", port=8000)

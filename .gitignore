@@ -6,4 +6,4 @@
 # Python
 .venv
 __pycache__
-.pytest_cache
+.*_cache

@@ -1,9 +1,11 @@
 import base64
+import io
 import requests
-import os
+
 from fastapi import APIRouter, UploadFile
 
 from lib.clients.openai import OPENAI_API_KEY
+from src.services.images import ImageResolver
 
 vision_router = APIRouter()
 
@@ -13,6 +15,18 @@ def encode_image(image_path):
     with open(image_path, "rb") as image_file:
         return base64.b64encode(image_file.read()).decode("utf-8")
 
+
+@vision_router.post("/images/embedding")
+def image_embedding(image_file: UploadFile):
+    """
+    Extracts image embeddings using OpenAI's CLIP model
+    """
+    file = image_file.file.read()
+    buffer = io.BytesIO(file)
+    buffer.name = "image.jpg"
+
+    embedding = ImageResolver.image_to_embedding(image_bytes=buffer)
+    return {"embedding": embedding}
 
 @vision_router.post("/vision")
 async def vision(image: UploadFile):

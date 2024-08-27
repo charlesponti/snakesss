@@ -6,17 +6,17 @@ from lib.repositories.file_repository import FileRepository
 
 file_repository = FileRepository()
 
-router = APIRouter(
+ollama_router = APIRouter(
     prefix="/api/ollama",
     tags=["ollama"],
 )
 
 
-@router.post("/candidate_email_parser")
-def text_to_candidates(message: Annotated[str, Form()], model: Optional[str]):
-    system_message = file_repository.get_file_contents(
-        "lib/prompts/system_role_description.txt"
-    )
+@ollama_router.post("/chat")
+def chat(message: Annotated[str, Form()], model: Optional[str]):
+    system_message = """
+    You are an intelligent human being who is capable of conversing about any topic.
+    """
     model = model if model else "llama3"
     payload = {
         "model": model,
