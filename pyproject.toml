@@ -17,6 +17,12 @@ dependencies = [
     "torchvision",
     "torchaudio",
     "transformers",
+    "typer>=0.12.5",
+    "anthropic>=0.34.1",
+    "langchain>=0.2.16",
+    "langchain-community>=0.2.16",
+    "langchain-openai>=0.1.23",
+    "tqdm>=4.64.1",
 ]
 
 [tool.hatch.build.targets.wheel]
