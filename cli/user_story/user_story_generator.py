@@ -15,7 +15,7 @@ from langchain_core.runnables import RunnablePassthrough, RunnableSerializable
 dotenv.load_dotenv()
 
 from lib.clients.openai import openai_chat
-from lib.repositories.file_repository import FileRepository
+from lib.file_service import FileRepository
 from cli.user_story.user_story_basic import UserStory, UserStoryExample, get_user_story_examples
 
 system_prompt = FileRepository.get_file_contents("cli/user_story/user_story_generator.md")

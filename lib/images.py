@@ -2,7 +2,7 @@ from io import BytesIO
 from typing import List
 
 from src.schemas.types import ImageInfo, Metadata
-from src.services.chromadb_service import get_image_collection
+from lib.clients.chromadb_service import get_image_collection
 
 from PIL import Image
 import torch
@@ -25,7 +25,9 @@ class ImageResolver:
             return []
 
         results = collection.query(
-            query_texts=[query], n_results=limit, include=["metadatas", "documents"]
+            query_texts=[query],
+            n_results=limit,
+            include=["metadatas", "documents"]
         )
 
         image_infos = []

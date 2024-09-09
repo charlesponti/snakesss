@@ -12,11 +12,17 @@
     "boto",
     "dotenv",
     "fastapi",
+    "GGUF",
+    "groq",
     "iterrows",
     "levelname",
-    "ollama",
+    "llama",
+    "lmstudio",
+    "pydantic",
     "schnell",
     "spacy",
-    "typer"
+    "tqdm",
+    "typer",
+    "uvicorn"
   ]
 }

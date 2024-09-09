@@ -3,8 +3,8 @@ from typing import List
 import strawberry
 from strawberry.file_uploads import Upload
 
+from lib.images import ImageResolver
 from src.schemas.types import Message, Note
-from src.services.images import ImageResolver
 
 
 def send_chat_message():

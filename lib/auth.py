@@ -1,6 +1,6 @@
 from fastapi import HTTPException
+from lib.clients.supabase import supabase_client
 from src.schemas.types import User
-from src.services.supabase import supabase_client
 
 
 def get_current_user(token: str) -> User:

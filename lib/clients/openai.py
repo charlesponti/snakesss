@@ -2,7 +2,7 @@ import os
 from typing import Annotated, Optional
 
 from openai import AsyncOpenAI, OpenAI
-from langchain_openai import ChatOpenAI
+from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from pydantic import StringConstraints
 from pydantic.v1.types import SecretStr
 
@@ -13,9 +13,12 @@ if not OPENAI_API_KEY:
 
 
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
+
 openai_async_client = AsyncOpenAI(api_key=OPENAI_API_KEY)
+
 openai_chat = ChatOpenAI(model="gpt-4o", api_key=SecretStr(OPENAI_API_KEY))
 
+openai_embedding_model = OpenAIEmbeddings(api_key=SecretStr(OPENAI_API_KEY))
 
 def get_openai_embedding(text):
     response = openai_client.embeddings.create(model="text-similarity-embeddings-v1", input=text)

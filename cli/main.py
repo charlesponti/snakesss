@@ -1,12 +1,18 @@
-# Read --file from command line and open file
+import dotenv
+
+dotenv.load_dotenv()
 
 import sys
 import typer
 
+from cli.notes_etl import notes_app
+from cli.user_story.user_story_generator import user_story_app
+from lib.file_service import FileRepository
 from lib.writing.utils import get_formatted_line, get_words, has_personal_pronouns
 
 app = typer.Typer()
-
+app.add_typer(notes_app)
+app.add_typer(user_story_app)
 
 @app.command()
 def remove_duplicate_lines(
@@ -27,10 +33,7 @@ def remove_duplicate_lines(
             formatted_line = get_formatted_line(line, lines)
             if formatted_line is None:
                 continue
-            if (
-                formatted_line not in formatted_lines
-                and formatted_line not in self_referential_lines
-            ):
+            if formatted_line not in formatted_lines and formatted_line not in self_referential_lines:
                 words = get_words(formatted_line)
                 if len(words) == 1:
                     single_words.add(formatted_line.replace("-", "").replace(" ", ""))
@@ -66,27 +69,22 @@ def sort_file(file: str):
 
 
 @app.command()
-def remove_duplicate_sections(file: str):
-    if len(file) < 2:
-        print("Usage: python notes-analyzer.py --file <file>")
-        sys.exit(1)
+def remove_duplicate_sections(file_path: str = typer.Option(help="The path to a text file.")):
+    notes = FileRepository.get_file_contents(file_path)
 
-    with open(file, "r") as f:
-        notes = f.read()
+    # Split file by "****"
+    split_notes: list[str] = notes.split("****")
+    print(f"Number of notes: {len(split_notes)}")
 
-        # Split file by "****"
-        notes = notes.split("****")
-        print(f"Number of notes: {len(notes)}")
+    # Remove duplicates
+    notes = list(set(notes))
+    print(f"Number of notes (without duplicates): {len(split_notes)}")
 
-        # Remove duplicates
-        notes = list(set(notes))
-        print(f"Number of notes (without duplicates): {len(notes)}")
-
-        # Write to file
-        with open(f"{file}-unduped.txt", "w") as f:
-            for note in notes:
-                f.write(note)
-                f.write("****")
+    # Write to file
+    with open(f"{file_path}-unduped.txt", "w") as file:
+        for note in notes:
+            file.write(note)
+            file.write("****")
 
 
 if __name__ == "__main__":

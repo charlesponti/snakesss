@@ -3,7 +3,7 @@ import strawberry
 from strawberry.fastapi import GraphQLRouter
 from typing import Any, AsyncGenerator
 
-from src.services.auth import get_current_user
+from lib.auth import get_current_user
 from src.schemas.mutation import Mutation
 from src.schemas.query import Query
 

@@ -1,18 +1,25 @@
 services:
-  web:
+  api:
+    container_name: snakesss-api
     build:
       context: .
       dockerfile: Dockerfile.dev
+    develop:
+      watch:
+        - action: sync
+          path: .
+          target: /app
+          ignore:
+            - .venv/
+        - action: rebuild
+          path: pyproject.toml
     ports:
       - "5678:5678" # Debugging port
       - "5555:8000"
     volumes:
       - .:/app
       - /app/__pycache__/
-    environment:
-      - CHROMA_HOST=chroma
-      - CHROMA_PORT=8000
-    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    command: uv run uvicorn main:app --reload --host 0.0.0.0 --port 8000
     # command: ["sh", "-c", "python -m debugpy --wait-for-client --listen 0.0.0.0:5678 -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload"]
     depends_on:
       - postgres
@@ -34,7 +41,7 @@ services:
 
   rabbitmq:
     image: rabbitmq:management-alpine
-    container_name: rabbitmq
+    container_name: snakesss-rabbitmq
     ports:
       - "5672:5672"
       - "15672:15672"
@@ -53,7 +60,7 @@ services:
       - postgres
 
   redis:
-    container_name: altar-redis
+    container_name: snakesss-redis
     image: redis:latest
     ports:
       - "6379:6379"
