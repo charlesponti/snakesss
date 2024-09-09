@@ -4,15 +4,15 @@ import strawberry
 from strawberry.file_uploads import Upload
 
 from lib.images import ImageResolver
+
 from src.schemas.types import Message, Note
 
 
 def send_chat_message():
     return []
 
-async def upload_voice_note(
-    self, info: strawberry.Info, audio_file: Upload, chat_id: int
-) -> List[Note]:
+
+async def upload_voice_note(self, info: strawberry.Info, audio_file: Upload, chat_id: int) -> List[Note]:
     return []
 
 

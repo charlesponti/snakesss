@@ -2,11 +2,13 @@
   "git.ignoreLimitWarning": true,
   "[python]": {
     "diffEditor.ignoreTrimWhitespace": false,
-    "gitlens.codeLens.symbolScopes": ["!Module"],
+    "editor.formatOnSave": true,
     "editor.formatOnType": true,
-    "editor.wordBasedSuggestions": "off",
-    "editor.defaultFormatter": "charliermarsh.ruff"
+    "editor.defaultFormatter": "charliermarsh.ruff",
+    "editor.wordBasedSuggestions": "off"
   },
+  "editor.formatOnSave": true,
+  "ruff.nativeServer": "auto",
   "cSpell.ignoreWords": ["langchain", "openai"],
   "cSpell.words": [
     "boto",

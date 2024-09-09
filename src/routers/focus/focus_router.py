@@ -7,9 +7,11 @@ from pydantic import BaseModel
 from lib.clients.chromadb_service import vector_db
 from lib.file_service import FileRepository
 from lib.logger import logger
+
 from src.routers.focus.focus_service import analyze_user_input
 
 focus_router = APIRouter()
+
 
 @focus_router.post("/focus")
 def focus(transcript: str, model: str = "llama3-70b-8192"):
@@ -36,6 +38,7 @@ def test():
 
 class Query(BaseModel):
     query: str
+
 
 @focus_router.post("/tasks/search/")
 async def search_tasks(query: Query):

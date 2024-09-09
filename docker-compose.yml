@@ -16,11 +16,7 @@ services:
     ports:
       - "5678:5678" # Debugging port
       - "5555:8000"
-    volumes:
-      - .:/app
-      - /app/__pycache__/
     command: uv run uvicorn main:app --reload --host 0.0.0.0 --port 8000
-    # command: ["sh", "-c", "python -m debugpy --wait-for-client --listen 0.0.0.0:5678 -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload"]
     depends_on:
       - postgres
       - rabbitmq

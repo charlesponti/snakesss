@@ -1,18 +1,18 @@
 import io
 
-from fastapi import APIRouter, Depends, UploadFile
+from fastapi import APIRouter, UploadFile
 
-from lib.clients.openai import openai_client
-from lib.auth import get_current_user
-from lib.clients.groq_service import groq_client
-from src.schemas.types import User
 from lib.ai_models import audio_models
+from lib.clients.groq_service import groq_client
+from lib.clients.openai import openai_client
+
 from src.routers.media.vision_router import vision_router
 
-media_router = APIRouter()
-media_router.include_router(vision_router, prefix="/vision")
+audio_router = APIRouter()
+audio_router.include_router(vision_router, prefix="/vision")
 
-@media_router.post("/audio/transcribe")
+
+@audio_router.post("/audio/transcribe")
 def transcribe_audio(
     audio_file: UploadFile,
     model: str = "openai",

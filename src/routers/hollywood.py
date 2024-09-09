@@ -1,8 +1,10 @@
 import json
 from typing import Annotated
+
+from fastapi import APIRouter, Form
+
 from lib.clients.openai import openai_client
 from lib.file_service import FileRepository
-from fastapi import APIRouter, Form
 
 router = APIRouter(
     prefix="/api/hollywood",
@@ -14,9 +16,7 @@ file_repository = FileRepository()
 
 @router.post("/candidate_email_parser")
 async def candidate_email_parser(message: Annotated[str, Form()]):
-    system_message = file_repository.get_file_contents(
-        "./lib/prompts/candidate_email_parser.txt"
-    )
+    system_message = file_repository.get_file_contents("./lib/prompts/candidate_email_parser.txt")
     response = openai_client.chat.completions.create(
         model="gpt-3.5-turbo",
         # model="gpt-4o",

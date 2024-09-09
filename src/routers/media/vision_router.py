@@ -1,7 +1,7 @@
 import base64
 import io
-import requests
 
+import requests
 from fastapi import APIRouter, UploadFile
 
 from lib.clients.openai import OPENAI_API_KEY
@@ -46,9 +46,7 @@ async def vision(image: UploadFile):
         "max_tokens": 300,
     }
 
-    response = requests.post(
-        "https://api.openai.com/v1/chat/completions", headers=headers, json=payload
-    )
+    response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
 
     return response.json()
 
@@ -64,4 +62,3 @@ def image_embedding(image_file: UploadFile):
 
     embedding = ImageResolver.image_to_embedding(image_bytes=buffer)
     return {"embedding": embedding}
-
