@@ -7,11 +7,12 @@
     "editor.defaultFormatter": "charliermarsh.ruff",
     "editor.wordBasedSuggestions": "off"
   },
-  "editor.formatOnSave": true,
   "ruff.nativeServer": "auto",
   "cSpell.ignoreWords": ["langchain", "openai"],
   "cSpell.words": [
     "boto",
+    "chromadb",
+    "deduped",
     "dotenv",
     "fastapi",
     "GGUF",
@@ -20,9 +21,12 @@
     "levelname",
     "llama",
     "lmstudio",
+    "Ollama",
     "pydantic",
     "schnell",
+    "Snakesss",
     "spacy",
+    "SUPABASE",
     "tqdm",
     "typer",
     "uvicorn"

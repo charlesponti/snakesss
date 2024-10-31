@@ -1,24 +1,21 @@
 import csv
-from datetime import datetime
 import os
-from typing import List
 import uuid
+from datetime import datetime
+from typing import List
 
-import dotenv
-from tqdm import tqdm
 import typer
+from langchain.prompts import ChatPromptTemplate
 from langchain_core.messages import AIMessage, BaseMessage, HumanMessage, ToolMessage
 from langchain_core.prompts import MessagesPlaceholder
-from langchain.prompts import ChatPromptTemplate
 from langchain_core.runnables import RunnablePassthrough, RunnableSerializable
+from tqdm import tqdm
 
-dotenv.load_dotenv()
-
+from cli.user_story.user_story_basic import UserStory, UserStoryExample, get_user_story_examples
 from lib.clients.openai import openai_chat
 from lib.file_service import FileRepository
-from cli.user_story.user_story_basic import UserStory, UserStoryExample, get_user_story_examples
 
-system_prompt = FileRepository.get_file_contents("cli/user_story/user_story_generator.md")
+system_prompt = FileRepository.get_file_contents("cli/user_story/user_story_prompt.md")
 
 user_story_app = typer.Typer(name="user_story")
 

@@ -1,12 +1,13 @@
-import os
 from typing import Annotated, Optional
 
-from openai import AsyncOpenAI, OpenAI
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
+from openai import AsyncOpenAI, OpenAI
 from pydantic import StringConstraints
 from pydantic.v1.types import SecretStr
 
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY", None)
+from conf import settings
+
+OPENAI_API_KEY = settings.OPENAI_API_KEY
 
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY is not set")
@@ -18,7 +19,8 @@ openai_async_client = AsyncOpenAI(api_key=OPENAI_API_KEY)
 
 openai_chat = ChatOpenAI(model="gpt-4o", api_key=SecretStr(OPENAI_API_KEY))
 
-openai_embedding_model = OpenAIEmbeddings(api_key=SecretStr(OPENAI_API_KEY))
+openai_embeddings = OpenAIEmbeddings(api_key=SecretStr(OPENAI_API_KEY))
+
 
 def get_openai_embedding(text):
     response = openai_client.embeddings.create(model="text-similarity-embeddings-v1", input=text)

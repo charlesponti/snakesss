@@ -1,37 +1,18 @@
 import base64
-import io
 
-import requests
 from fastapi import APIRouter, UploadFile
 
-from lib.clients.openai import OPENAI_API_KEY
-from lib.images import ImageResolver
+from lib.clients.openai import openai_client
 
 vision_router = APIRouter()
 
 
-# Function to encode the image
-def encode_image(image_path):
-    with open(image_path, "rb") as image_file:
-        return base64.b64encode(image_file.read()).decode("utf-8")
+def get_image_description(image_bytes: bytes):
+    base64_image = base64.b64encode(image_bytes).decode("utf-8")
 
-
-@vision_router.post("/image")
-async def vision(image: UploadFile):
-    # Path to your image
-    image_path = "path_to_your_image.jpg"
-
-    # Getting the base64 string
-    base64_image = encode_image(image_path)
-
-    headers = {
-        "Content-Type": "application/json",
-        "Authorization": f"Bearer {OPENAI_API_KEY}",
-    }
-
-    payload = {
-        "model": "gpt-4o-mini",
-        "messages": [
+    completion = openai_client.chat.completions.create(
+        model="gpt-4o-mini",
+        messages=[
             {
                 "role": "user",
                 "content": [
@@ -43,12 +24,17 @@ async def vision(image: UploadFile):
                 ],
             }
         ],
-        "max_tokens": 300,
-    }
+        max_tokens=1000,
+    )
 
-    response = requests.post("https://api.openai.com/v1/chat/completions", headers=headers, json=payload)
+    return completion.choices[0].message.content
 
-    return response.json()
+
+@vision_router.post("/image")
+async def vision(image: UploadFile):
+    response = get_image_description(image.file.read())
+
+    return response
 
 
 @vision_router.post("/images/embedding")
@@ -57,8 +43,16 @@ def image_embedding(image_file: UploadFile):
     Extracts image embeddings using OpenAI's CLIP model
     """
     file = image_file.file.read()
-    buffer = io.BytesIO(file)
-    buffer.name = "image.jpg"
 
-    embedding = ImageResolver.image_to_embedding(image_bytes=buffer)
-    return {"embedding": embedding}
+    # Encode the image bytes to base64
+    try:
+        image_description = get_image_description(file)
+        if not image_description:
+            raise Exception("Failed to get image description")
+    except Exception as e:
+        return {"error": str(e)}
+
+    # Call the OpenAI API to get the embedding
+    response = openai_client.embeddings.create(model="text-embedding-ada-002", input=image_description)
+
+    return {"embedding": response.data[0].embedding}

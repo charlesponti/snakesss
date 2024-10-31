@@ -4,6 +4,8 @@ import typer
 from rich.console import Console
 from rich.table import Table
 
+rate_of_return_app = typer.Typer(name="rate-of-return")
+
 
 def calculate_nominal_return(initial_value: float, final_value: float, years: int) -> float:
     """
@@ -80,7 +82,8 @@ def calculate_real_return(nominal_return: float, inflation_rate: float) -> float
     return (1 + nominal_return) / (1 + inflation_rate) - 1
 
 
-def main(
+@rate_of_return_app.command(name="house-value")
+def calculate_house_value(
     initial_value: float = typer.Argument(..., help="The initial value of the house (e.g., 405000)"),
     sale_price: float = typer.Argument(..., help="The yearly increase in house value (e.g., 600000)"),
     years: int = typer.Argument(..., help="Number of years (e.g., 12)"),
@@ -114,4 +117,4 @@ def main(
 
 
 if __name__ == "__main__":
-    typer.run(main)
+    rate_of_return_app()

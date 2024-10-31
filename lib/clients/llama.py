@@ -1,5 +1,6 @@
-from langchain_openai import ChatOpenAI
+from langchain.pydantic_v1 import SecretStr
 from langchain_ollama import ChatOllama
+from langchain_openai import ChatOpenAI
 
 llama_chat = ChatOllama(
     model="llama3.1",
@@ -8,7 +9,5 @@ llama_chat = ChatOllama(
 )
 
 lmstudio_chat = ChatOpenAI(
-    temperature=0.5,
-    base_url="http://host.docker.internal:1234/v1",
-    api_key="lmstudio"
+    temperature=0.5, base_url="http://host.docker.internal:1234/v1", api_key=SecretStr("lmstudio")
 )
