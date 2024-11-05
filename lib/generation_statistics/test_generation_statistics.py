@@ -1,5 +1,6 @@
 import pytest
-from generation_statistics import GenerationStatistics
+
+from .generation_statistics import GenerationStatistics
 
 
 def test_init():
