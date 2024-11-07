@@ -28,6 +28,7 @@ This script reads a JSON file containing a list of image URLs and downloads each
 3. The script will download each image to the specified directory. If the image already exists in the directory, it skips the download.
 4. Profit!
 """
+
 import json
 import os
 from typing import Annotated, Optional
@@ -37,7 +38,8 @@ from urllib.parse import urlparse
 
 app = typer.Typer()
 
-def download_image(url: str, directory: str) -> None:
+
+def download_image(url: str, directory: str) -> tuple[Exception | None, str | None]:
     """Download an image from a URL and save it to the specified directory."""
     try:
         response = requests.get(url, stream=True)
@@ -52,28 +54,28 @@ def download_image(url: str, directory: str) -> None:
 
         # Check if the image already exists
         if os.path.exists(image_path):
-            typer.echo(f"Image '{image_name}' already exists. Skipping download.")
-            return
+            raise FileExistsError("Image '{image_name}' already exists. Skipping download.")
 
         # Save the image to the specified directory
-        with open(image_path, 'wb') as image_file:
+        with open(image_path, "wb") as image_file:
             for chunk in response.iter_content(1024):
                 image_file.write(chunk)
 
-        typer.echo(f"Downloaded '{image_name}' successfully.")
+        return None, image_name
 
     except requests.RequestException as e:
-        typer.echo(f"Failed to download '{url}': {e}")
+        return e, None
+
 
 @app.command()
 def download_images(
     json_filename: Annotated[str, typer.Option(help="JSON file containing image URLs")],
-    directory: Annotated[Optional[str], typer.Argument(help="Directory to save the images")]
+    directory: Annotated[Optional[str], typer.Argument(help="Directory to save the images")],
 ):
     """Read a JSON file and download images from the URLs listed in the JSON."""
     try:
         # Read the JSON file
-        with open(json_filename, 'r') as file:
+        with open(json_filename, "r") as file:
             urls = json.load(file)
 
         # Ensure the JSON file contains a list of URLs
@@ -83,7 +85,11 @@ def download_images(
 
         # Download each image from the list of URLs
         for url in urls:
-            download_image(url, directory or os.getcwd())
+            err, image_name = download_image(url, directory or os.getcwd())
+            if err:
+                typer.echo(f"Could not download {url}", err=True)
+            else:
+                typer.echo(f"Downloaded '{image_name}' successfully.")
 
     except FileNotFoundError:
         typer.echo(f"File '{json_filename}' not found.")
@@ -91,6 +97,7 @@ def download_images(
     except json.JSONDecodeError:
         typer.echo(f"File '{json_filename}' is not a valid JSON file.")
         raise typer.Exit(code=1)
+
 
 if __name__ == "__main__":
     app()
