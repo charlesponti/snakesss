@@ -6,7 +6,6 @@ readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "chromadb",
-    "langchain-anthropic>=0.1.23",
     "langchain-chroma>=0.1.2",
     "langchain-community>=0.2.16",
     "langchain-openai>=0.1.23",
