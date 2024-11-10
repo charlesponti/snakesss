@@ -35,7 +35,6 @@ class _Settings(BaseSettings, extra="allow"):
     SENTRY_DSN: HttpUrl | None = None
 
     # APIs
-    GROQ_API_KEY: str
     OPENAI_API_KEY: str
 
     # Chroma
