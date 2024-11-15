@@ -1,5 +1,3 @@
-# Python project and Docker development shortcuts
-
 # Python-related commands
 .PHONY: install test lint format
 
@@ -36,7 +34,7 @@ docker-clean:
 .PHONY: dev clean
 
 dev:
-	uvicorn main:app --reload --host 0.0.0.0 --port 8000
+	uvicorn main:app --reload --host 0.0.0.0 --port 5555
 
 clean:
 	find . -type f -name "*.pyc" -delete
@@ -56,6 +54,5 @@ help:
 	@echo "  docker-stop  - Stop Docker container"
 	@echo "  docker-clean - Remove Docker container"
 	@echo "  dev          - Run development server"
-	@echo "  setup        - Set up database and create superuser"
 	@echo "  clean        - Remove compiled Python files"
 	@echo "  help         - Show this help message"

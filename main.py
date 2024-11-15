@@ -5,7 +5,7 @@ load_dotenv()
 
 from src.server import app  # noqa: E402
 
-PORT = os.getenv("PORT", 8000)
+PORT: int = int(os.getenv("PORT") or 5555)
 
 if __name__ == "__main__":
     import uvicorn

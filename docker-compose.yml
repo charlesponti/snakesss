@@ -15,8 +15,8 @@ services:
           path: pyproject.toml
     ports:
       - "5678:5678" # Debugging port
-      - "5555:8000"
-    command: uv run uvicorn main:app --reload --host 0.0.0.0 --port 8000
+      - "5555:5555"
+    command: uv run uvicorn main:app --reload --host 0.0.0.0 --port 5555
     depends_on:
       - postgres
       - rabbitmq

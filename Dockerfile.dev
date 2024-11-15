@@ -60,7 +60,7 @@ ENTRYPOINT []
 EXPOSE 5678
 
 # Expose application port
-EXPOSE 8000
+EXPOSE 5555
 
 # Run the application with hot reloading
-CMD ["uv", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uv", "run", "uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "5555"]
