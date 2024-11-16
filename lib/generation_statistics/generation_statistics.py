@@ -6,15 +6,13 @@ class GenerationStatistics:
         input_tokens=0,
         output_tokens=0,
         total_time=0,
-        model_name="llama3-8b-8192",
+        model_name="",
     ):
         self.input_time = input_time
         self.output_time = output_time
         self.input_tokens = input_tokens
         self.output_tokens = output_tokens
-        self.total_time = (
-            total_time  # Sum of queue, prompt (input), and completion (output) times
-        )
+        self.total_time = total_time  # Sum of queue, prompt (input), and completion (output) times
         self.model_name = model_name
 
     def get_input_speed(self):
@@ -63,9 +61,7 @@ class GenerationStatistics:
             },
             "total": {
                 "speed": (
-                    (self.input_tokens + self.output_tokens) / self.total_time
-                    if self.total_time != 0
-                    else 0
+                    (self.input_tokens + self.output_tokens) / self.total_time if self.total_time != 0 else 0
                 ),
                 "tokens": self.input_tokens + self.output_tokens,
                 "time": self.total_time,
