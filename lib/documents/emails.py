@@ -1,7 +1,6 @@
 import os
 from email import message_from_bytes
 from email.message import Message
-from email.policy import default
 
 from fastapi import File, UploadFile
 
@@ -45,7 +44,7 @@ async def process_email(email: UploadFile = File(...)):
     email_content = await email.read()
 
     # Parse the email
-    msg = message_from_bytes(email_content, policy=default)
+    msg = message_from_bytes(email_content)
 
     # Retrieve the email body
     body = get_email_body(msg)
