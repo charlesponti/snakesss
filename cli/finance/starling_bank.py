@@ -6,7 +6,7 @@ import typer
 app = typer.Typer(name="starling-bank")
 
 
-def convert_csvs_to_single(folder_path):
+def combine_starling_bank_statements(folder_path):
     """
     Converts multiple CSVs in a folder to a single CSV.
 
@@ -53,4 +53,4 @@ def convert_csvs_to_single(folder_path):
 
 @app.command("merge-multiple", help="Merge multiple Starling Bank CSV Statements into a single CSV.")
 def merge_multiple(folder_path: str = typer.Argument(..., help="Path to the folder containing the CSVs.")):
-    convert_csvs_to_single(folder_path)
+    combine_starling_bank_statements(folder_path)
