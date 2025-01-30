@@ -8,6 +8,11 @@ Our goal is to calculate  F(n)  efficiently, where F(n) is the is the number at 
 the Fibonacci sequence.
 """
 
+import typer
+
+
+app = typer.Typer()
+
 
 # Recursion
 def fibonacci_recursion(n: int) -> int:
@@ -46,11 +51,28 @@ def fibonacci_dynamic(n: int) -> int:
     prev_value, new_value = 0, 1
     for _ in range(2, n + 1):
         prev_value, new_value = new_value, prev_value + new_value
-        # 1, (0 + 1) = 1
-        # 1, (1 + 1) = 2
-        # 2, (1 + 2) = 3
-        # 3, (2 + 3) = 5
-        # 5, (3 + 5) = 8
-        # 8, (5 + 8) = 13
 
     return new_value
+
+
+@app.command()
+def calculate(
+    n: int = typer.Argument(..., help="Position in the Fibonacci sequence to calculate"),
+    method: str = typer.Option("all", help="Method to use for calculation: recursion, memo, dynamic"),
+):
+    """Calculate the nth Fibonacci number using various methods"""
+    result = 0
+
+    if method == "recursion":
+        result = fibonacci_recursion(n)
+        typer.echo(f"Recursion: F({n}) = {result}")
+        return
+    elif method == "memo":
+        result = fibonacci_memo(n, {})
+        typer.echo(f"Memoized: F({n}) = {result}")
+        return
+    elif method == "dynamic":
+        # Dynamic programming
+        result = fibonacci_dynamic(n)
+
+    print(f"Recursion: F({n}) = {result}")
