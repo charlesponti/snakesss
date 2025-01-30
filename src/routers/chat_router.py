@@ -10,7 +10,7 @@ chat_router = APIRouter()
 @chat_router.post("/chat")
 async def chat(message: str = Form(...)):
     response = await openai_async_client.chat.completions.create(
-        model="gpt-3.5-turbo",
+        model="gpt-4o-mini",
         messages=[{"role": "user", "content": message}],
         stream=False,
     )
@@ -21,7 +21,7 @@ async def chat(message: str = Form(...)):
 async def stream_chat(message: str = Form(...)):
     async def generate():
         stream = await openai_async_client.chat.completions.create(
-            model="gpt-3.5-turbo",
+            model="gpt-4o-mini",
             messages=[{"role": "user", "content": message}],
             stream=True,
         )
