@@ -2,8 +2,7 @@ from typing import Annotated, Optional
 
 from langchain_openai import ChatOpenAI, OpenAIEmbeddings
 from openai import AsyncOpenAI, OpenAI
-from pydantic import StringConstraints
-from pydantic.v1.types import SecretStr
+from pydantic import StringConstraints, SecretStr
 
 from conf import settings
 
@@ -11,7 +10,6 @@ OPENAI_API_KEY = settings.OPENAI_API_KEY
 
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY is not set")
-
 
 openai_client = OpenAI(api_key=OPENAI_API_KEY)
 

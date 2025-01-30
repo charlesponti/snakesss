@@ -12,6 +12,7 @@
   "cSpell.words": [
     "boto",
     "chromadb",
+    "crewai",
     "dataframe",
     "dataframes",
     "deduped",
@@ -19,6 +20,8 @@
     "fastapi",
     "iterrows",
     "levelname",
+    "ndarray",
+    "ollama",
     "pydantic",
     "snakesss",
     "spacy",
