@@ -5,7 +5,7 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 
-from src.routers import tool_router, chat_router
+from src.routers import tool_router, chat_router, crew_router
 from src.routers.media.audio_router import audio_router
 
 app = FastAPI()
@@ -26,6 +26,7 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 # Routers
 app.include_router(chat_router.chat_router)
 app.include_router(tool_router.tool_router)
+app.include_router(crew_router.app)
 app.include_router(audio_router, prefix="/media")
 
 
