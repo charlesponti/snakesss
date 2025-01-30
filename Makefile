@@ -34,7 +34,7 @@ docker-clean:
 .PHONY: dev clean
 
 dev:
-	uvicorn main:app --reload --host 0.0.0.0 --port 5555
+	uvicorn main:app --reload --port 5555
 
 clean:
 	find . -type f -name "*.pyc" -delete
