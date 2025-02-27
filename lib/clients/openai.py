@@ -15,7 +15,7 @@ openai_client = OpenAI(api_key=OPENAI_API_KEY)
 
 openai_async_client = AsyncOpenAI(api_key=OPENAI_API_KEY)
 
-openai_chat = ChatOpenAI(model="gpt-4o", api_key=SecretStr(OPENAI_API_KEY))
+openai_chat = ChatOpenAI(model="gpt-4o-mini", api_key=SecretStr(OPENAI_API_KEY))
 
 openai_embeddings = OpenAIEmbeddings(api_key=SecretStr(OPENAI_API_KEY))
 
@@ -34,7 +34,7 @@ async def get_openai_chat_completion(
     model: Annotated[Optional[str], StringConstraints(pattern=r"^gpt-*$")] = None,
 ):
     response = openai_client.chat.completions.create(
-        model=model or "gpt-4o",
+        model=model or "gpt-4o-mini",
         messages=[
             {"role": "system", "content": system_message},
             {"role": "user", "content": user_message},

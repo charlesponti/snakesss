@@ -19,11 +19,13 @@ from lib.writing.utils import (
     get_words,
     has_self_referential_pronouns,
 )
+import cli.notes.process_markdown as process_markdown
 
 # Initialize OpenAI API
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 notes_app = typer.Typer(name="notes")
+notes_app.add_typer(process_markdown.app, name="process")
 
 
 def save_lines_to_file(filename: str, lines: list[str] | set[str]):

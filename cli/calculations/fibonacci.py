@@ -11,7 +11,7 @@ the Fibonacci sequence.
 import typer
 
 
-app = typer.Typer()
+app = typer.Typer(name="fibonacci")
 
 
 # Recursion
@@ -55,24 +55,24 @@ def fibonacci_dynamic(n: int) -> int:
     return new_value
 
 
-@app.command()
+@app.command("calculate")
 def calculate(
-    n: int = typer.Argument(..., help="Position in the Fibonacci sequence to calculate"),
+    position: int = typer.Argument(..., help="Position in the Fibonacci sequence to calculate"),
     method: str = typer.Option("all", help="Method to use for calculation: recursion, memo, dynamic"),
 ):
     """Calculate the nth Fibonacci number using various methods"""
     result = 0
 
     if method == "recursion":
-        result = fibonacci_recursion(n)
-        typer.echo(f"Recursion: F({n}) = {result}")
+        result = fibonacci_recursion(position)
+        typer.echo(f"Recursion: F({position}) = {result}")
         return
     elif method == "memo":
-        result = fibonacci_memo(n, {})
-        typer.echo(f"Memoized: F({n}) = {result}")
+        result = fibonacci_memo(position, {})
+        typer.echo(f"Memoized: F({position}) = {result}")
         return
     elif method == "dynamic":
         # Dynamic programming
-        result = fibonacci_dynamic(n)
+        result = fibonacci_dynamic(position)
 
-    print(f"Recursion: F({n}) = {result}")
+    print(f"Recursion: F({position}) = {result}")

@@ -4,7 +4,7 @@ from fastapi import APIRouter, UploadFile
 
 from lib.clients.openai import openai_client
 
-vision_router = APIRouter()
+router = APIRouter()
 
 
 def get_image_description(image_bytes: bytes):
@@ -30,14 +30,14 @@ def get_image_description(image_bytes: bytes):
     return completion.choices[0].message.content
 
 
-@vision_router.post("/image")
+@router.post("/image")
 async def vision(image: UploadFile):
     response = get_image_description(image.file.read())
 
     return response
 
 
-@vision_router.post("/images/embedding")
+@router.post("/images/embedding")
 def image_embedding(image_file: UploadFile):
     """
     Extracts image embeddings using OpenAI's CLIP model

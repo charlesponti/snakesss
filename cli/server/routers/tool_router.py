@@ -7,14 +7,14 @@ from pydantic import BaseModel
 from lib.clients.openai import openai_chat
 from lib.file_service import FileRepository
 
-tool_router = APIRouter(prefix="/tools")
+router = APIRouter(prefix="/tools")
 
 
 class WriterOutput(BaseModel):
     text: str
 
 
-@tool_router.post("/writer")
+@router.post("/writer")
 def writer_tool(input: Annotated[str, Form(...)]):
     structured_llm = openai_chat.with_structured_output(WriterOutput)
 

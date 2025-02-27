@@ -1,10 +1,11 @@
+from enum import Enum
 import numpy as np
 from scipy.spatial import distance_matrix
 import typer
 import pandas as pd
 import json
 from pathlib import Path
-from typing import List, Tuple, Literal
+from typing import List, Tuple
 
 app = typer.Typer()
 
@@ -22,6 +23,12 @@ def calculate_distance_matrix(coordinates: np.ndarray, metric: str = "euclidean"
     return distance_matrix(coordinates, coordinates, p=p_value)
 
 
+class OutputFormat(str, Enum):
+    text = "text"
+    csv = "csv"
+    json = "json"
+
+
 @app.command()
 def calculate(
     coordinates: List[str] = typer.Argument(
@@ -33,7 +40,7 @@ def calculate(
     metric: str = typer.Option(
         "euclidean", "--metric", "-m", help="Distance metric: manhattan, euclidean, or chebyshev"
     ),
-    output_format: Literal["text", "csv", "json"] = typer.Option(
+    output_format: OutputFormat = typer.Option(
         "text", "--output", "-o", help="Output format (text, csv, or json)"
     ),
 ):

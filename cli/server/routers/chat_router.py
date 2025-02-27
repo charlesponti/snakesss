@@ -4,10 +4,10 @@ from fastapi.responses import StreamingResponse
 from lib.clients.openai import openai_async_client
 from lib.logger import logger
 
-chat_router = APIRouter()
+router = APIRouter()
 
 
-@chat_router.post("/chat")
+@router.post("/chat")
 async def chat(message: str = Form(...)):
     response = await openai_async_client.chat.completions.create(
         model="gpt-4o-mini",
@@ -17,7 +17,7 @@ async def chat(message: str = Form(...)):
     return {"text": response.choices[0].message.content}
 
 
-@chat_router.post("/chat/stream")
+@router.post("/chat/stream")
 async def stream_chat(message: str = Form(...)):
     async def generate():
         stream = await openai_async_client.chat.completions.create(

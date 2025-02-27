@@ -1,17 +1,20 @@
 import re
-from sys import argv
 import markdown
 import json
 import os
 from pydantic import BaseModel
 from bs4 import BeautifulSoup
+from typer import Typer
+import typer
 
 core_elements = ["h1", "h2", "h3", "h4", "h5", "h6", "p", "ul", "ol", "li"]
+
+app = Typer()
 
 
 class Note(BaseModel):
     file: str
-    heading: str
+    heading: str | None = None
     text: str
     tag: str | None = None
     date: str | None = None
@@ -23,6 +26,21 @@ def get_date(element: BeautifulSoup) -> str | None:
     return date
 
 
+class DateFromText(BaseModel):
+    full_date: str | None
+    year: str | None
+
+
+def get_date_from_text(text: str) -> DateFromText | None:
+    text = text.strip()
+    full_date = re.search(r"\d{4}-\d{2}-\d{2}", text)
+    year = re.search(r"\d{4}", text)
+
+    return DateFromText(
+        full_date=full_date.group(0) if full_date else None, year=year.group(0) if year else None
+    )
+
+
 def extract_data_from_html(html, filename):  # Updated function signature
     soup = BeautifulSoup(html, "html.parser")
     current_heading = None
@@ -31,9 +49,10 @@ def extract_data_from_html(html, filename):  # Updated function signature
     bullet_points = []
     # Process known elements
     for element in soup.find_all(["h1", "h2", "h3", "h4", "h5", "h6", "p", "ul", "ol"]):
-        full_date = re.search(r"\d{4}-\d{2}-\d{2}", element.get_text().strip())
-        date = full_date.group(0) if full_date else None
+        dates = get_date_from_text(element.get_text().strip())
+        date = dates.full_date or dates.year if dates else None
         tag = element.name
+
         if element.name in ["h1", "h2", "h3", "h4", "h5", "h6"]:
             current_heading = element.get_text().strip()
             unique_headings.add(current_heading)
@@ -75,7 +94,10 @@ def extract_data_from_html(html, filename):  # Updated function signature
     }
 
 
-def process_markdown_folder(folder_path):
+@app.command("process-markdown")
+def process_markdown_folder(
+    folder_path: str = typer.Option(..., help="The path to the folder containing markdown files"),
+):
     notes: list[Note] = []
 
     for filename in os.listdir(folder_path):
@@ -105,13 +127,12 @@ def process_markdown_folder(folder_path):
                 for data in data_content["others"]:
                     notes.append(Note(file=filename, heading="", text=data["text"], tag=data["tag"]))
 
+    # Convert Note objects to dictionaries before JSON serialization
+    notes_dict = [note.model_dump() for note in notes]
+
     with open("processed_data.json", "w") as outfile:
         json.dump(
-            notes,
+            notes_dict,
             outfile,
             indent=4,
         )
-
-
-if __name__ == "__main__":
-    process_markdown_folder(argv[1])

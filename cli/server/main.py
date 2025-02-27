@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-from src.server import app  # noqa: E402
+from server import app  # noqa: E402
 
 PORT: int = int(os.getenv("PORT") or 5555)
 

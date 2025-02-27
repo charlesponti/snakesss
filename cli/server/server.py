@@ -5,8 +5,8 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 
-from src.routers import tool_router, chat_router, crew_router
-from src.routers.media.audio_router import audio_router
+from server.routers import tool_router, chat_router, crew_router, task_router
+from server.routers.media import audio_router, vision_router
 
 app = FastAPI()
 
@@ -24,10 +24,12 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 # Routers
-app.include_router(chat_router.chat_router)
-app.include_router(tool_router.tool_router)
-app.include_router(crew_router.app)
-app.include_router(audio_router, prefix="/media")
+app.include_router(chat_router.router)
+app.include_router(tool_router.router)
+app.include_router(crew_router.router)
+app.include_router(task_router.router)
+app.include_router(audio_router.router, prefix="/media")
+app.include_router(vision_router.router, prefix="/vision")
 
 
 @app.exception_handler(ResponseValidationError)
