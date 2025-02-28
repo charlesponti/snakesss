@@ -40,3 +40,7 @@ def csv_to_sqlite(path: str = Argument(..., help="Path to the CSV file")):
     df = pandas.read_csv(path)
     df.to_sql("data", conn, index=False, if_exists="replace")
     conn.close()
+
+
+if __name__ == "__main__":
+    csv_to_sqlite()

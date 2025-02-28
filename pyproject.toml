@@ -36,8 +36,25 @@ dependencies = [
     "markdown>=3.7",
 ]
 
+[project.optional-dependencies]
+dev = [
+    "pip>=24.3.1",
+    "pre-commit>=3.8.0",
+    "pytest>=8.3.3",
+    "ruff>=0.6.4",
+]
+
+[project.scripts]
+snakesss = "cli.main:app"
+notes = "cli.notes.notes_cli:notes_app"
+user-story = "cli.user_story.user_story_generator:user_story_app"
+crawler = "cli.crawler:app"
+fibonacci = "cli.calculations.fibonacci:app"
+distance-matrix = "cli.calculations.distance_matrix:app"
+csv-to-sqlite = "cli.csv_to_sqlite:csv_to_sqlite"
+
 [tool.hatch.build.targets.wheel]
-packages = ["main.py"]
+packages = ["cli"]
 
 [build-system]
 requires = ["hatchling"]

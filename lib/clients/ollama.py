@@ -1,3 +1,4 @@
-from langchain_ollama.llms import OllamaLLM
+from langchain_ollama import ChatOllama
 
-phi4_model = OllamaLLM(model="phi4")
+phi4_model = ChatOllama(model="phi4")
+llama = ChatOllama(model="llama3.2")

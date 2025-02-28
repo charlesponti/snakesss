@@ -119,7 +119,4 @@ def write_stories_to_csv(stories: List[UserStory]):
 
 
 if __name__ == "__main__":
-    idea = "Create an app that helps users track their daily water intake"
-    query_analyzer = create_user_story_generator()
-    result = query_analyzer.invoke(idea)
-    print(result)
+    user_story_app()

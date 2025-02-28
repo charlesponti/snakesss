@@ -1,6 +1,9 @@
 # Python-related commands
 .PHONY: install test lint format
 
+install-tool:
+	uv tool install . -e
+
 install:
 	pip install -r requirements.txt
 

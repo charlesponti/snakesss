@@ -119,3 +119,7 @@ def get_file_sections(
         typer.echo(json.dumps(sections[1], indent=4))
     else:
         typer.echo(json.dumps(sections, indent=4))
+
+
+if __name__ == "__main__":
+    notes_app()

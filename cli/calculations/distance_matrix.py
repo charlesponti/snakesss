@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 from typing import List, Tuple
 
-app = typer.Typer()
+app = typer.Typer(name="distance-matrix")
 
 
 def parse_coordinates(coord_str: str) -> Tuple[float, float]:

@@ -76,3 +76,7 @@ def calculate(
         result = fibonacci_dynamic(position)
 
     print(f"Recursion: F({position}) = {result}")
+
+
+if __name__ == "__main__":
+    app()
