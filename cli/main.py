@@ -8,7 +8,7 @@ from cli.calculations import distance_matrix, fibonacci, rate_of_return  # noqa:
 from cli.notes.notes_cli import notes_app  # noqa: E402
 from cli.user_story.user_story_generator import user_story_app  # noqa: E402
 
-from cli.crawler import app as crawler  # noqa: E402
+from cli.crawlers.main import app as crawler  # noqa: E402
 import cli.nexus as nexus  # noqa: E402
 
 app = typer.Typer()
