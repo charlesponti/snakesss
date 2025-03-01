@@ -1,8 +1,10 @@
 import os
+
 import typer
+
 from cli.crawlers.job_post import convert_text_to_job_post
+from cli.crawlers.utils import scrape_website
 from cli.crawlers.zillow import scrape_zillow
-from cli.crawlers.utils import get_filename_from_url, scrape_website
 
 app = typer.Typer()
 
@@ -38,8 +40,11 @@ def crawl_job_post(url: str = typer.Option(..., help="The URL to crawl")):
         raise ValueError("No text found on the website")
 
     response = convert_text_to_job_post(result)
+    response.url = url
 
-    output_path = os.path.join(os.getcwd(), f"{get_filename_from_url(url)}.json")
+    output_path = os.path.join(
+        os.getcwd(), f"{response.companyName.lower()} - {response.jobTitle.lower()}.json"
+    )
     with open(output_path, "w") as f:
         f.write(response.model_dump_json())
 

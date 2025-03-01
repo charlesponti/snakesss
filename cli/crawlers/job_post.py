@@ -20,6 +20,7 @@ class JobPost(BaseModel):
     roleDescription: Optional[str] = None
     roleIdealCandidate: Optional[str] = None
     roleResponsibilities: Optional[str] = None
+    url: Optional[str] = None
 
 
 def convert_text_to_job_post(text: str) -> JobPost:
@@ -49,6 +50,5 @@ def convert_text_to_job_post(text: str) -> JobPost:
     chain = {"result": RunnablePassthrough()} | prompt | llm
 
     chain_response = chain.invoke({"question": text})
-    print(chain_response)
     response = JobPost.model_validate(chain_response)
     return response

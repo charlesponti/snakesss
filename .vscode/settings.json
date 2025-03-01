@@ -1,33 +1,32 @@
 {
-  "git.ignoreLimitWarning": true,
-  "[python]": {
-    "diffEditor.ignoreTrimWhitespace": false,
-    "editor.formatOnSave": true,
-    "editor.formatOnType": true,
-    "editor.defaultFormatter": "charliermarsh.ruff",
-    "editor.wordBasedSuggestions": "off"
-  },
-  "ruff.nativeServer": "auto",
-  "cSpell.ignoreWords": ["langchain", "openai"],
-  "cSpell.words": [
-    "boto",
-    "chromadb",
-    "crewai",
-    "dataframe",
-    "dataframes",
-    "deduped",
-    "dotenv",
-    "fastapi",
-    "iterrows",
-    "levelname",
-    "ndarray",
-    "ollama",
-    "pydantic",
-    "snakesss",
-    "spacy",
-    "supabase",
-    "tqdm",
-    "typer",
-    "uvicorn"
-  ]
+	"git.ignoreLimitWarning": true,
+	"[python]": {
+		"diffEditor.ignoreTrimWhitespace": false,
+		"editor.formatOnSave": true,
+		"editor.formatOnType": true,
+		"editor.defaultFormatter": "charliermarsh.ruff",
+		"editor.wordBasedSuggestions": "off"
+	},
+	"cSpell.ignoreWords": ["langchain", "openai"],
+	"cSpell.words": [
+		"boto",
+		"chromadb",
+		"crewai",
+		"dataframe",
+		"dataframes",
+		"deduped",
+		"dotenv",
+		"fastapi",
+		"iterrows",
+		"levelname",
+		"ndarray",
+		"ollama",
+		"pydantic",
+		"snakesss",
+		"spacy",
+		"supabase",
+		"tqdm",
+		"typer",
+		"uvicorn"
+	]
 }
