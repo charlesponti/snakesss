@@ -8,7 +8,7 @@ app = typer.Typer()
 
 
 @app.command(name="scrape")
-def _scrape_website(url: str = typer.Option(..., help="The URL to scrape")):
+def _scrape_website(url: str = typer.Option(..., help="The URL to scrape")) -> str:
     text = scrape_website(url)
     url_parts = url.split("/")
 
@@ -27,6 +27,8 @@ def _scrape_website(url: str = typer.Option(..., help="The URL to scrape")):
 
     with open(output_path, "w") as f:
         f.write(str(text))
+
+    return text
 
 
 @app.command(name="job-post")
