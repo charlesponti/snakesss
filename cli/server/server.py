@@ -5,8 +5,12 @@ from fastapi.openapi.utils import get_openapi
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordBearer
 
-from server.routers import tool_router, chat_router, crew_router, task_router
-from server.routers.media import audio_router, vision_router
+from cli.server.routers.media import audio_router, vision_router
+from cli.server.routers.chat_router import router as chat_router
+from cli.server.routers.crew_router import router as crew_router
+from cli.server.routers.task_router import router as task_router
+from cli.server.routers.tool_router import router as tool_router
+from cli.server.routers.scraper_router import router as scraper_router
 
 app = FastAPI()
 
@@ -24,12 +28,14 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 
 
 # Routers
-app.include_router(chat_router.router)
-app.include_router(tool_router.router)
-app.include_router(crew_router.router)
-app.include_router(task_router.router)
+app.include_router(chat_router)
+app.include_router(tool_router)
+app.include_router(crew_router)
+app.include_router(task_router)
 app.include_router(audio_router.router, prefix="/media")
 app.include_router(vision_router.router, prefix="/vision")
+# Include the new scraper router with no prefix so the route is /scrape
+app.include_router(scraper_router)
 
 
 @app.exception_handler(ResponseValidationError)

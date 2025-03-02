@@ -1,6 +1,6 @@
 from fastapi import APIRouter
 from pydantic import BaseModel
-from server.routers.crews.crew import TravelCrew
+from cli.server.routers.crews.crew import TravelCrew
 
 router = APIRouter(prefix="/crew")
 

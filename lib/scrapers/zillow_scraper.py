@@ -1,7 +1,9 @@
 from typing import List, Optional
+from openai.types import CompletionUsage
 from pydantic import BaseModel
 from lib.clients.openai import openai_client
-from cli.crawlers.utils import scrape_website
+from lib.costs import calculate_token_costs, token_costs_to_dataframe
+from lib.scrapers.utils import scrape_website, get_filename_from_url
 
 
 class HomeDetails(BaseModel):
@@ -27,7 +29,13 @@ class HomeDetails(BaseModel):
     fees: Optional[List[str]] = None
 
 
-def get_home_details_from_zillow(url: str):
+class HomeDetailsResponse(BaseModel):
+    text: str
+    details: HomeDetails
+    usage: CompletionUsage | None
+
+
+def get_home_details_from_zillow(url: str) -> HomeDetailsResponse:
     """Extract home details from a Zillow listing URL"""
     text = scrape_website(url)
 
@@ -47,4 +55,23 @@ def get_home_details_from_zillow(url: str):
     if not response:
         raise ValueError("Could not parse home details")
 
-    return {"text": text, "details": response, "completion": completion}
+    return HomeDetailsResponse(text=text, details=response, usage=completion.usage)
+
+
+def scrape_zillow(url: str) -> tuple[HomeDetailsResponse, str, str]:
+    # Get home details using the extracted scraper function
+    result = get_home_details_from_zillow(url)
+
+    # Calculate costs using the extracted cost calculator
+    cost_info = calculate_token_costs(result.usage)
+
+    # Print cost information as a formatted table
+    cost_table = token_costs_to_dataframe(cost_info)
+    print(cost_table)
+
+    # Save results to files
+    url_filename = get_filename_from_url(url)
+    filename = f"{url_filename}.json"
+    markdown_filename = f"{url_filename}.md"
+
+    return result, filename, markdown_filename
